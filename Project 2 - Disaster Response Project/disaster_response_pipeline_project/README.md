@@ -55,7 +55,9 @@ git clone https://github.com/alerlemos/DataScienceNanoDegree_Udacity.git
 
 # Preview
 Below are some graphs created with the data avaiable.
-
+![plot](./Media/graph1.png)
+![plot](./Media/graph2.png)
+![plot](./Media/graph3.png)
 
 ## Results
 In the figure below, you can see that when a message is sent, the model will classify it as belonging to one or more categories. In the example, the message was: "We need water" and it was classified as belonging to the 'Related', 'Request', 'Aid Related', 'Water' and 'Direct Report' classes.
