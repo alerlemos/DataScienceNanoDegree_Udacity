@@ -85,9 +85,11 @@ def save_data(df, database_filename):
     Output:
         None
     '''
+    # Creating the path to save the db file
+    path = 'sqlite:///' + database_filename
 
     # Creating the engine
-    engine = create_engine(database_filename)
+    engine = create_engine(path)
 
     # Saving the data
     df.to_sql('Data_clean', engine, index=False)

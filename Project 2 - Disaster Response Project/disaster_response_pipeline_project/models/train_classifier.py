@@ -15,6 +15,7 @@ nltk.download('punkt')
 nltk.download('wordnet')
 import pickle
 from sklearn.metrics import accuracy_score,precision_score,recall_score
+import numpy as np
 
 def load_data(database_filepath):
     '''
@@ -30,8 +31,10 @@ def load_data(database_filepath):
         X: Dataframe with the labels (type: pandas DataFrame)
         category_names: Names of the categories (type: list)
     '''
+    # Creating the path to the db file
+    path  = 'sqlite:///' + database_filepath
     # Creating the engine
-    engine = create_engine(database_filepath)
+    engine = create_engine(path)
 
     # Reading the data from the sql table
     df = pd.read_sql_table('Data_clean', engine)
@@ -50,7 +53,7 @@ def load_data(database_filepath):
 
     Y_columns.remove('id')
 
-    X = df[X_columns]
+    X = df['message']
     Y = df[Y_columns]
 
     # Obtaining the names of the categories
@@ -125,32 +128,23 @@ def evaluate_model(model, X_test, Y_test, category_names):
     # Making the first prediction
     y_pred1 = model.predict(X_test)
 
+    columns = list(Y_test.columns)
+
+    y_pred_1 = pd.DataFrame(data = y_pred1, columns = columns)
+
     # Obtaining the first resutls
-    acc1 = accuracy_score(y_test, y_pred1)
-    prec1 = precision_score(y_test, y_pred1)
-    rec1 = recall_score(y_test, y_pred1)
+    acc_list = []
+    prec_list = []
+    rec_list = []
+    for col in columns:
+        acc_list.append(accuracy_score(Y_test[col], y_pred_1[col]))
+        prec_list.append(precision_score(Y_test[col], y_pred_1[col], average = 'macro'))
+        rec_list.append(recall_score(Y_test[col], y_pred_1[col], average = 'macro'))
+
+    acc1 = np.mean(acc_list)
+    prec1 = np.mean(prec_list)
+    rec1 = np.mean(rec_list)
     print(f'Model without GridSearch:\nAccuracy = {acc1}\nPrecision = {prec1}\nRecall = {rec1}')
-
-    # Performing the Grid Search
-    parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2)),
-        'vect__max_df': (0.5, 0.75, 1.0),
-        'vect__max_features': (None, 5000, 10000),
-        'tfidf__use_idf': (True, False),
-    }
-
-    cv = GridSearchCV(model, param_grid = parameters)
-    cv.fit(X_train,y_train)
-
-    # Making the second prediction
-    y_pred2 = cv.predict(X_test)
-
-    # Obtaining the second resutls
-    acc2 = accuracy_score(y_test, y_pred2)
-    prec2 = precision_score(y_test, y_pred2)
-    rec2 = recall_score(y_test, y_pred2)
-    print(f'Model without GridSearch:\nAccuracy = {acc2}\nPrecision = {prec2}\nRecall = {rec2}')
-
 
 
 def save_model(model, model_filepath):
