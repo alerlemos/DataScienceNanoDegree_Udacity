@@ -53,10 +53,17 @@ git clone https://github.com/alerlemos/DataScienceNanoDegree_Udacity.git
 
 5. Go to http://0.0.0.0:3001/
 
-## Preview of the program
+# Preview
+Below are some graphs created with the data avaiable.
+
+
+## Results
+In the figure below, you can see that when a message is sent, the model will classify it as belonging to one or more categories. In the example, the message was: "We need water" and it was classified as belonging to the 'Related', 'Request', 'Aid Related', 'Water' and 'Direct Report' classes.
+
+![plot](./Media/preview.png)
 
 ## Authors
-<a href = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
+<img src = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
 
 ## Acknowledgements
 * [Udacity](https://www.udacity.com/) for providing this amazing Data Science Nanodegree Program
