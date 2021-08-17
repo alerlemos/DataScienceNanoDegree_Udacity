@@ -63,7 +63,7 @@ In the figure below, you can see that when a message is sent, the model will cla
 ![plot](./Media/preview.png)
 
 ## Authors
-<img src = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
+<a href = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
 
 ## Acknowledgements
 * [Udacity](https://www.udacity.com/) for providing this amazing Data Science Nanodegree Program
