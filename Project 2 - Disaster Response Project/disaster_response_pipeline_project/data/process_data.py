@@ -70,6 +70,9 @@ def clean_data(df):
     # Removing duplicates
     df.drop_duplicates(inplace = True)
 
+    # Removing values that are not 0 or 1 in the column 'related'
+    df = df[df['related'] < 2]
+
     return df
 
 
@@ -92,7 +95,7 @@ def save_data(df, database_filename):
     engine = create_engine(path)
 
     # Saving the data
-    df.to_sql('Data_clean', engine, index=False)
+    df.to_sql('Data_clean', engine, index=False,  if_exists = 'replace')
 
 
 def main():

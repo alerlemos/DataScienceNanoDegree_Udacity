@@ -38,7 +38,7 @@ model = joblib.load("../models/classifier.pkl")
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
-@app.route('/index')
+@app.route('/index') 
 def index():
 
     # extract data needed for visuals

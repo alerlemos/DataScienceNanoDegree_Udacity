@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -13,6 +14,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
+nltk.download('stopwords') 
 import pickle
 from sklearn.metrics import accuracy_score,precision_score,recall_score
 import numpy as np
@@ -77,6 +79,9 @@ def tokenize(text):
     # Tokenizing the text
     tokens = word_tokenize(text)
 
+    # Removing stop words
+    tokens = [t for t in tokens if t not in stopwords.words("english")]
+
     # Initializing the Lemmatizer
     lemmatizer = WordNetLemmatizer()
 
@@ -107,7 +112,17 @@ def build_model():
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
 
-    return pipeline
+    # Performing grid search to optimize the parameters
+    parameters = {
+        'vect__ngram_range': ((1, 1), (1, 2)),
+        'vect__max_df': (0.5, 0.75, 1.0),
+        'vect__max_features': (None, 5000, 10000),
+        'tfidf__use_idf': (True, False),
+    }
+
+    cv = GridSearchCV(pipeline, param_grid = parameters)
+
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
@@ -125,26 +140,19 @@ def evaluate_model(model, X_test, Y_test, category_names):
     Output:
         None
     '''
-    # Making the first prediction
-    y_pred1 = model.predict(X_test)
+    # Making the prediction
+    y_pred = model.predict(X_test)
 
+    # Obtaining the columns names
     columns = list(Y_test.columns)
 
-    y_pred_1 = pd.DataFrame(data = y_pred1, columns = columns)
+    # Creating a dataframe with the predictions
+    df_y_pred = pd.DataFrame(data = y_pred, columns = columns)
 
-    # Obtaining the first resutls
-    acc_list = []
-    prec_list = []
-    rec_list = []
+    # Obtaining the f1 score, precision and recall for each category
     for col in columns:
-        acc_list.append(accuracy_score(Y_test[col], y_pred_1[col]))
-        prec_list.append(precision_score(Y_test[col], y_pred_1[col], average = 'macro'))
-        rec_list.append(recall_score(Y_test[col], y_pred_1[col], average = 'macro'))
-
-    acc1 = np.mean(acc_list)
-    prec1 = np.mean(prec_list)
-    rec1 = np.mean(rec_list)
-    print(f'Model without GridSearch:\nAccuracy = {acc1}\nPrecision = {prec1}\nRecall = {rec1}')
+        print(f'Classification results for column: {col}')
+        print(classification_report(Y_test[col], df_y_pred[col]))
 
 
 def save_model(model, model_filepath):
