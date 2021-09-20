@@ -62,6 +62,9 @@ This part was divided into 4 steps:
 ## Authors
 <a href = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
 
+## Medium Post
+<a href = 'https://alexandrerossetolemos.medium.com/customer-segmentation-project-116c47d7a4df'>Customer Segmentation Project</a>
+
 ## Acknowledgements
 * [Udacity](https://www.udacity.com/) for providing this amazing Data Science Nanodegree Program.
 * [Bertelsmann/Arvato](https://www.bertelsmann.com/divisions/arvato/) for providing the relevant datasets for this project.
