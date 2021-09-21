@@ -1,72 +1,70 @@
-# Disaster Response Pipeline Project
+# Capstone Project: Customer Segmentation Report for Arvato Financial Services
 
 ## Overview of the project
 
-The second projetct in the <a href='real messages that were sent during disaster events'> Udacity Data Science Nano Degree </a>required the development of a disaster response pipeline. To categorize each message, it was necessary to use NLP techniques and build a ML model.
+For the final projetct in the <a href='real messages that were sent during disaster events'> Udacity Data Science Nano Degree </a>, several project ideas were presented. I chose to tackle on the Bertelsmann/Arvato Project.
 
-This project was divided into 4 sections:
-- Loading and cleaning the data;
-- Creating the ML Pipeline;
-- Evaluating the model obtained.
+The ideia behind this project is to deal with a real-life problem that the Arvato's Data Science group has to handle: the search for new customers. 
 
-## Loading and cleaning the data
-The data provided was diveded into two csv files: messages and categories.
+The main ideia of this project is to find similarities between people who are currently customers and people who are not. Then, use this information to find groups of potential new customers (people who are not currently customers but have high similarities with people who are).
 
-The messages file contained real messages that were sent during disaster events while the categories file contained wich category the message belonged to. 
-The files were loaded and then merged to obtain a single dataframe with all the information. The categories column was used to create other columns, each representing one category. The data was stored in a SQL databased using the sqlalchemy library.
+This project was divided in 3 parts:
+- Part One: Data Analysis and Data Cleaning
+- Part Two: Customer Segmentation
+- Part Three: Supervised Learning Model
 
-## Creating the ML Pipeline
-In this part of the project, a pipeline was created to deal with all the transformations required to treat the data and make it usable for the development of the machine learning model. Here, the data was loaded from the SQL table, tokenized, normalized and inputted to the desired classifier (it was used the MultiOutputClassifier with RandomForest).
+This project is mainly divided in two goals:
+- The first goal of this project is to analyze demographics data for customers of a mail-order sales company in Germany, comparing it against demographics information for the general population. The purpose is to find simillar characteristics in both groups, signaling good candidates, among the general population, for a marketing campaign.
 
-## Evaluating the model obtained
-After the model was trained, it was evaluated to see how well it performed when dealing with data that was not used in the training stage.
+- The second goal is to develop a machine learning model that can classify new samples as good or bad candidates for a marketing campaingn using the demographic information from each individual.
 
+## Data Information
+For this project, four datasets were made available with the following characteristics: 
+
+- azdias: Demographics data for the general population of Germany. 891211 persons (rows) x 366 features (columns).
+- customers: Demographics data for customers of a mail-order company. 191652 persons (rows) x 369 features (columns).
+- mailout_train: Demographics data for individuals who were targets of a marketing campaign. 42982 persons (rows) x 367 (columns).
+- mailout_test: Demographics data for individuals who were targets of a marketing campaign. 42833 persons (rows) x 366 (columns).
+
+Two excel files containing the information about the data were also used.
+- DIAS Information Levels - Attributes 2017: Information about the features present in the datasets.
+- DIAS Attributes - Values 2017: Information about the values and what they represent in each feature of the dataset.
+
+**Since the information contained in the files are sensitive, the data will not be avaible in this repository.**
+
+## Customer Segmentation
+In this part of the project, the two datasets (azdias and customers) were compared to find similarities between then. This was made to find wich characteristics the two populations (customers and possible future customers) shared in common. These similarities can be used to narrow down the search for new customers, optimizing the results and reducing marketing costs.
+
+## Supervised Learning Model
+The next part of the project involved building a Supervisioned Machine Learning model to predict if a person was a good candidate of becoming a new customer.
+This was made using the mailout_train dataset that had a column signaling if the person responded to the marketing campaign or not.
+
+This part was divided into 4 steps:
+- Analysis of the dataset: Training and testing using all features and using only the selected features found in the Customer Clustering part. A Logistic Regression Classifier will be used to determin wich one is the best. The Stratified K-Fold Cross Validation algorithm will also be used to try dealing with the unbalanced data.
+
+- Sampling redistribuition technique: Resampling techniques (Random Undersampling and Random Oversampling) will be used to deal with the unbalanced data. The same classifier will be trained and tested again with the resampled data and the results will be compared with the ones previosly obtained.
+
+- Definition of the best model: Several Machine Learning Models will be used to find the one that delivers the best result.
+
+- Hyperparameter Tuning: The hyperparameters of the best model will be tuned to find the combination that optimizes the results.
 
 ## Libraries used:
-- <a href = 'https://pandas.pydata.org'>pandas</a>
-- <a href = 'https://scikit-learn.org/stable/'>scikit-learn</a>
-- <a href = 'https://www.sqlalchemy.org'>sqlalchemy</a>
-- <a href = 'https://www.nltk.org'>nltk</a>
+- <a href = 'https://pandas.pydata.org'>pandas</a> == 1.2.3
+- <a href = 'https://scikit-learn.org/stable/'>scikit-learn</a> == 0.23.2
 - <a href = 'https://docs.python.org/3/library/pickle.html'>pickle</a>
-- <a href = 'https://numpy.org'>numpy</a>
-- <a href = 'https://flask.palletsprojects.com/en/2.0.x/'>flask</a>
-- <a href = 'https://joblib.readthedocs.io/en/latest/'>joblib</a>
-- <a href = 'https://plotly.com'>plotly</a>
-- <a href = 'https://docs.python.org/3/library/json.html'>json</a>
-
-## Instructions:
-1. Clone the git repository:
-```
-git clone https://github.com/alerlemos/DataScienceNanoDegree_Udacity.git
-```
-2. Go to the folder of the project: 'Project 2 - Disaster Response Project/disaster_response_pipeline_project/'
-
-3. Run the following commands in the project's root directory to set up your database and model.
-
-    - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-    - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
-
-4. Run the following command in the app's directory to run your web app.
-    `python run.py`
-
-5. Go to http://0.0.0.0:3001/
-
-# Preview
-Below are some graphs created with the data avaiable.
-![plot](./Media/graph1.png)
-![plot](./Media/graph2.png)
-![plot](./Media/graph3.png)
-
-## Results
-In the figure below, you can see that when a message is sent, the model will classify it as belonging to one or more categories. In the example, the message was: "We need water" and it was classified as belonging to the 'Related', 'Request', 'Aid Related', 'Water' and 'Direct Report' classes.
-
-![plot](./Media/preview.png)
+- <a href = 'https://numpy.org'>numpy</a> == 1.21.2
+- <a href = 'https://docs.python.org/3/library/collections.html'>collections</a>
+- <a href = 'https://matplotlib.org'>matplotlib</a> == 3.3.4
+- <a href = 'https://seaborn.pydata.org'>seaborn</a> == 0.11.1
+- <a href = 'https://scikit-optimize.github.io/stable/'>skopt</a> == 0.8.1
+- <a href = 'https://imbalanced-learn.org/stable/'>imblearn</a> == 0.8.0
 
 ## Authors
 <a href = 'https://github.com/alerlemos'>Alexandre Rosseto Lemos</a>
 
+## Medium Post
+<a href = 'https://alexandrerossetolemos.medium.com/customer-segmentation-project-116c47d7a4df'>Customer Segmentation Project</a>
+
 ## Acknowledgements
-* [Udacity](https://www.udacity.com/) for providing this amazing Data Science Nanodegree Program
-* [Figure Eight](https://www.figure-eight.com/) for providing the relevant dataset to train the model
+* [Udacity](https://www.udacity.com/) for providing this amazing Data Science Nanodegree Program.
+* [Bertelsmann/Arvato](https://www.bertelsmann.com/divisions/arvato/) for providing the relevant datasets for this project.
